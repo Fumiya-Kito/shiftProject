@@ -24,15 +24,9 @@
         </label>
 
         <ul class="menu">
-            {% if user.pk %}
-            <a href="{% url 'account_detail' user.pk %}">MY PAGE</a>
-            <a href="{% url 'month_with_forms' user.pk %}">SUBMISSION</a>
-            <a href="{% url 'month_with_schedule' user.pk %}">CONFIRMATION</a>
-            {% else %}
             <a href="{% url 'index' %}">HOME</a>
             <a href="{% url 'login' %}">LOGIN</a>
             <a href="{% url 'register_user' %}">SIGN UP</a>
-            {% endif %}
         </ul>
         <label for="chk" class="hide-menu-btn">
             <i class="fas fa-times"></i>
