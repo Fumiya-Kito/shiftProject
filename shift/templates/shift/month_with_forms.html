@@ -1,0 +1,107 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+
+</p>
+
+<style>
+    table {
+        table-layout: fixed;
+    }
+</style>
+
+
+
+<div class="box">
+    <h2>希望シフト提出</h2>
+    <a href="{% url 'month_with_forms' user.pk half_previous.year half_previous.month half_previous.day %}">＜＜</a>
+    {{ month_current | date:"Y年m月d日〜" }}
+    <a href="{% url 'month_with_forms' user.pk half_next.year half_next.month half_next.day %}">＞＞</a>
+</div>
+
+
+<form action="" method="POST">{% csrf_token %}
+    {{ month_formset.management_form }}
+    <table class="table" border="1">
+        <thead>
+            <tr>
+                {% for w in week_names %}
+                <th>{{ w }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        {% if month_current.day <= 15 %}
+
+        <tbody>
+            {% for week_day_forms in month_day_forms %}
+            <tr>
+                {% for day, forms in week_day_forms.items %}
+                {% if now == day %}
+                <td class="table-success">
+                    {% else %}
+                <td>
+                    {% endif %}
+
+                    <div>
+
+
+                        {{ day | date:"m/d" }}
+                        <hr>
+
+
+                        {% for form in forms %}
+                        {{ form|crispy }}
+                        <hr>
+                        {% endfor %}
+
+
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        {% else %}
+
+        <tbody>
+            {% for week_day_forms in month_day_forms %}
+            <tr>
+                {% for day, forms in week_day_forms.items %}
+                {% if now == day %}
+                <td class="table-success">
+                    {% else %}
+                <td>
+                    {% endif %}
+
+                    <div>
+
+                        {{ day | date:"m/d" }}
+
+                        {% for form in forms %}
+                        {{ form|crispy }}
+                        {% endfor %}
+
+
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        {% endif %}
+
+    </table>
+
+    <div class="box">
+        ※出勤が『いいえ』の場合はデータは保存されません（出勤日だけ記述）<br>
+        ※間違えて提出した場合は下に出る更新フォームで再度提出してください
+    </div>
+    <button type="submit">シフト提出</button>
+</form>
+
+{% endblock body %}
